@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+    font-family: "Lato", sans-serif;
+	background-color: rgba(66, 180, 230, 0.2);
+}
+.top {
+	width: 100%; 
+	background-color: #42b4e6;
+	box-shadow: 5px 5px 5px #888888;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.2s;
+    padding-top: 100px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 100px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 100px;
+    margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="#">About</a>
+  <a href="#">Services</a>
+  <a href="#">Clients</a>
+  <a href="#">Contact</a>
+</div>
+
+<div class="top" style="height: 140px"><span style="padding-left: 20px; padding-top: 0px;font-size:100px;cursor:pointer" onclick="openNav()">&#9776;</span></div>
+
+<div style="height: calc(100vh - 140px);">
+
+<div style="float: left; height: 25%; width: 100%; text-align: center;">
+    <i style="color: #e75a5e; font-size: 20em" class="fa fa-arrow-up"></i>
+</div>
+<br>
+<div style="float: left; height: 25%; width: 100%; text-align: center;">
+    <h1 style="padding-left: 30px; font-size: 15em; display: inline">20.0</h1>
+    <h1 style="padding-right: 30px; font-size: 15em; display: inline;"> &#x2103;</h1>
+</div>
+<div style="float: left; height: 12.5%; width: 100%; text-align: center;">
+    <i style="font-size: 10em; color: red" class="fa fa-fire"></i>
+</div>
+<div style="float: left; height: 12.5%; width: 100%; text-align: center;">
+    <h1 style="padding-left: 30px; font-size: 5em; display: inline">21.0</h1>
+    <h1 style="padding-right: 30px; font-size: 5em; display: inline;"> &#x2103;</h1>
+</div>
+
+<div style="float: left; height: 25%; width: 100%; text-align: center;">
+    <i style="color: #00addb; font-size: 20em" class="fa fa-arrow-down"></i>
+</div>
+
+</div>
+
+<script>
+function openNav() {
+    document.getElementById("mySidenav").style.width = "700px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+}
+</script>
+     
+</body>
+</html> 
