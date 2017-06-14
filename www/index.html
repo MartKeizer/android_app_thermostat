@@ -4,6 +4,9 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" type="text/css" href="css/index.css">
+<script src="js/jquery-2.1.0.min.js"></script>
+<script src="js/api.js"></script>
+
 </head>
 <body>
 
@@ -20,7 +23,7 @@
 <div style="height: calc(100vh - 140px);">
 
 <div style="float: left; height: 25%; width: 100%; text-align: center;">
-    <i style="color: #e75a5e; font-size: 20em" class="fa fa-arrow-up"></i>
+    <i onclick="addTemp()" style="color: #e75a5e; font-size: 20em" class="fa fa-arrow-up"></i>
 </div>
 <br>
 <div style="float: left; height: 25%; width: 100%; text-align: center;">
@@ -31,12 +34,12 @@
     <i style="font-size: 10em; color: red" class="fa fa-fire"></i>
 </div>
 <div style="float: left; height: 12.5%; width: 100%; text-align: center;">
-    <h1 style="padding-left: 30px; font-size: 5em; display: inline">21.0</h1>
+    <h1 id="target_temp" style="padding-left: 30px; font-size: 5em; display: inline">20.0</h1>
     <h1 style="padding-right: 30px; font-size: 5em; display: inline;"> &#x2103;</h1>
 </div>
 
 <div style="float: left; height: 25%; width: 100%; text-align: center;">
-    <i style="color: #00addb; font-size: 20em" class="fa fa-arrow-down"></i>
+    <i onclick="minTemp()" style="color: #00addb; font-size: 20em" class="fa fa-arrow-down"></i>
 </div>
 
 </div>
@@ -48,6 +51,19 @@ function openNav() {
 
 function closeNav() {
     document.getElementById("mySidenav").style.left = "-700px";
+}
+function minTemp() {
+	var target_temp = parseFloat(document.getElementById("target_temp").innerHTML);
+	target_temp = Math.round( (target_temp -0.1) * 10) / 10;
+	document.getElementById("target_temp").innerHTML = target_temp;
+}
+function addTemp() {
+	put('','target_temperature','15.0');
+	console.log("New: " + get('','target_temperature'));
+	
+	var target_temp = parseFloat(document.getElementById("target_temp").innerHTML);
+	target_temp = Math.round( (target_temp +0.1) * 10) / 10;
+	document.getElementById("target_temp").innerHTML = target_temp;
 }
 </script>
      
