@@ -21,30 +21,44 @@
 <div class="top" style="height: 140px"><span style="padding-left: 20px; padding-right: 25vw;font-size:100px;cursor:pointer" onclick="openNav()">&#9776;</span><h1 style="display: inline; font-size: 100px">Home</h1></div>
 
 <div style="height: calc(100vh - 140px);">
-
+<div style="height: 5%">
+	<div style="float:left"><h1 id="day" style="padding-left: 30px; font-size: 4em; display: inline">Monday</h1></div>
+	<div style="float:right"><h1 id="time" style="padding-right: 30px; font-size: 4em; display: inline;">12:45</h1></div>
+</div>
 <div style="float: left; height: 25%; width: 100%; text-align: center;">
-    <i onclick="addTemp()" style="color: #e75a5e; font-size: 20em" class="fa fa-arrow-up"></i>
+    <i onclick="addTemp()" onmousedown="addTempStart()" onmouseup="addTempStop()" style="color: #e75a5e; font-size: 20em" class="fa fa-arrow-up"></i>
 </div>
 <br>
 <div style="float: left; height: 25%; width: 100%; text-align: center;">
-    <h1 style="padding-left: 30px; font-size: 15em; display: inline">20.0</h1>
+    <h1 id="current_temp" style="padding-left: 30px; font-size: 15em; display: inline"></h1>
     <h1 style="padding-right: 30px; font-size: 15em; display: inline;"> &#x2103;</h1>
 </div>
 <div style="float: left; height: 12.5%; width: 100%; text-align: center;">
-    <i style="font-size: 10em; color: red" class="fa fa-fire"></i>
+    <i id="fire" style="font-size: 10em; color: red" class="fa fa-fire"></i>
 </div>
 <div style="float: left; height: 12.5%; width: 100%; text-align: center;">
-    <h1 id="target_temp" style="padding-left: 30px; font-size: 5em; display: inline">20.0</h1>
+    <h1 id="target_temp" style="padding-left: 30px; font-size: 5em; display: inline"></h1>
     <h1 style="padding-right: 30px; font-size: 5em; display: inline;"> &#x2103;</h1>
 </div>
 
-<div style="float: left; height: 25%; width: 100%; text-align: center;">
-    <i onclick="minTemp()" style="color: #00addb; font-size: 20em" class="fa fa-arrow-down"></i>
+<div style="float: left; height: 20%; width: 100%; text-align: center;">
+    <i onclick="minTemp()"  onmousedown="minTempStart()" onmouseup="minTempStop()" style="color: #00addb; font-size: 20em" class="fa fa-arrow-down"></i>
 </div>
-
 </div>
 
 <script>
+var up = false;
+var down = false;
+window.setInterval(function(){
+	if (up == true){
+		addTemp();
+	}
+	if (down == true) {
+		minTemp();
+		console.log("omlaag");
+	}
+}, 100);
+
 function openNav() {
     document.getElementById("mySidenav").style.left = "0px";
 }
@@ -55,16 +69,58 @@ function closeNav() {
 function minTemp() {
 	var target_temp = parseFloat(document.getElementById("target_temp").innerHTML);
 	target_temp = Math.round( (target_temp -0.1) * 10) / 10;
-	document.getElementById("target_temp").innerHTML = target_temp;
+	put('targetTemperature','target_temperature',target_temp);
+	document.getElementById("target_temp").innerHTML = get('targetTemperature','target_temperature');
+}
+function minTempStart() {
+	down = true;
+}
+function minTempStop() {
+	down = false;
+}
+function addTempStart() {
+	up = true;
+}
+function addTempStop() {
+	up = false;
 }
 function addTemp() {
-	put('','target_temperature','15.0');
-	console.log("New: " + get('','target_temperature'));
-	
 	var target_temp = parseFloat(document.getElementById("target_temp").innerHTML);
 	target_temp = Math.round( (target_temp +0.1) * 10) / 10;
-	document.getElementById("target_temp").innerHTML = target_temp;
+	put('targetTemperature','target_temperature',target_temp);
+	document.getElementById("target_temp").innerHTML = get('targetTemperature','target_temperature');
 }
+
+window.setInterval(function(){
+  changeCurrents();
+}, 50);
+
+function changeCurrents(){
+	var targetTemp = get('targetTemperature','target_temperature');
+	var newTemp = get('currentTemperature','current_temperature');
+	document.getElementById("current_temp").innerHTML = newTemp;
+	var day = get('day','current_day');
+	document.getElementById("day").innerHTML = day;
+	var time = get('time','time');
+	document.getElementById("time").innerHTML = time;
+	if (targetTemp > newTemp) {
+		document.getElementById("fire").style.color = "red";
+	} else {
+		document.getElementById("fire").style.color = "rgba(33, 44, 49, 0.36)";
+	}
+}
+
+$( document ).ready(function() {
+  var targetTemp = get('targetTemperature','target_temperature');
+  document.getElementById("target_temp").innerHTML = targetTemp;
+  var newTemp = get('currentTemperature','current_temperature');
+  document.getElementById("current_temp").innerHTML = newTemp;
+  var day = get('day','current_day');
+  document.getElementById("day").innerHTML = day;
+  var time = get('time','time');
+  document.getElementById("time").innerHTML = time;
+});
+
 </script>
      
 </body>

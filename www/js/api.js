@@ -222,9 +222,6 @@ function uploadData(address, xml) {
         data: xml,
         async: false
     });
-	
-	console.log("Server: " + ServerUrl + address);
-	console.log("XML: " + xml);
 }
 
 function parseTime(t) {
