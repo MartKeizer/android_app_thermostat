@@ -15,6 +15,7 @@
   <div><a href="index.html" style="border: 1px solid black; min-width: 700px;">Home</a></div>
   <div><a href="week_planning.html" style="border: 1px solid black; min-width: 700px;">Week Planning</a></div>
   <div><a href="day_night_temperature.html" style="border: 1px solid black; min-width: 700px;">Day / Night</a></div>
+   <div><a href="vacation_setting.html" style="border: 1px solid black; min-width: 700px;">Vacation</a></div>
 </div>
 
 <div class="top" style="height: 140px"><span style="padding-left: 20px; padding-right: 10vw;font-size:100px;cursor:pointer" onclick="openNav()">&#9776;</span><h1 style="display: inline; font-size: 100px">Week Planning</h1></div>
@@ -30,9 +31,16 @@
 <div id="Sunday" onclick="changeDay(7, this)" class="left-day" style="">Sun</div>
 
 </div>
-
-
 <div style="margin-left: 20px;font-size: 2em; float: left; height: 100%; width: 80%; border: 0px solid black">
+
+<div style="float: left; padding-top: 30px; height: 15%; width: 100%; text-align: center;">
+    <div style="float:left; width:33%"><i id="fire" style="padding-right: 30px; font-size: 7em; color: #42b4e6" class="fa fa-user-o"></i></div>
+	<div style="float:left; width:33%; padding-top: 30px;"><label class="switch">
+	<input id="vacation" onchange="changeH()" type="checkbox">
+	<div class="slider round"></div>
+	</label></div>
+	<div style="float:left; width:33%"><i id="fire" style="padding-left: 35px; font-size: 7em; color: #42b4e6" class="fa fa-calendar-o"></i></div>
+</div>
 
 <!-- maandag -->
 <div id="1" style="display: block">
@@ -137,7 +145,9 @@
 </div>
 
 </div>
+
 </div>
+
 </div>
 
 <script>
@@ -186,6 +196,7 @@ function opslaan(dag){
 }
 $( document ).ready(function() {
 	ophalen('Monday');
+	setDefault();
 });
 </script>
      

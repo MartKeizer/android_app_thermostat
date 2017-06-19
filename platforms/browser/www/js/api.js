@@ -2,7 +2,7 @@
  * @author HTI students, Spring 2015, adjusted by N.Stash
  *
  */
-var ServerUrl = 'http://wwwis.win.tue.nl/2id40-ws/65';
+var ServerUrl = 'http://wwwis.win.tue.nl/2id40-ws/64';
 //Backup server
 //var ServerUrl = 'http://pcwin889.win.tue.nl/2id40-ws/64';
 
@@ -32,6 +32,7 @@ var NightTemperature;
 var CurrentTemperature;
 var TargetTemperature;
 var ProgramState;
+var HolidayState;
 
 var Program = {};
 Program[Days.Monday]    = [];

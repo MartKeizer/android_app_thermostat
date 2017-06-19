@@ -15,7 +15,8 @@
   <div></div>
   <div><a href="index.html" style="border: 1px solid black; min-width: 700px;">Home</a></div>
   <div><a href="week_planning.html" style="border: 1px solid black; min-width: 700px;">Week Planning</a></div>
-  <div><a href="other_settings.html" style="border: 1px solid black; min-width: 700px;">Other Settings</a></div>
+  <div><a href="day_night_temperature.html" style="border: 1px solid black; min-width: 700px;">Day / Night</a></div>
+   <div><a href="vacation_setting.html" style="border: 1px solid black; min-width: 700px;">Vacation</a></div>
 </div>
 
 <div class="top" style="height: 140px"><span style="padding-left: 20px; padding-right: 25vw;font-size:100px;cursor:pointer" onclick="openNav()">&#9776;</span><h1 style="display: inline; font-size: 100px">Home</h1></div>
@@ -55,7 +56,6 @@ window.setInterval(function(){
 	}
 	if (down == true) {
 		minTemp();
-		console.log("omlaag");
 	}
 }, 100);
 
@@ -93,10 +93,11 @@ function addTemp() {
 
 window.setInterval(function(){
   changeCurrents();
-}, 50);
+}, 200);
 
 function changeCurrents(){
 	var targetTemp = get('targetTemperature','target_temperature');
+	document.getElementById("target_temp").innerHTML = targetTemp;
 	var newTemp = get('currentTemperature','current_temperature');
 	document.getElementById("current_temp").innerHTML = newTemp;
 	var day = get('day','current_day');
