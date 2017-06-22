@@ -7,7 +7,7 @@
 <script src="js/jquery-2.1.0.min.js"></script>
 <script src="js/api.js"></script>
 </head>
-<body>
+<body onunload="saveOnExit()">
 
 <div id="mySidenav" class="sidenav" style="border-right: 3px solid black;">
   <div style="border-bottom: 3px solid black; min-width: 700px;"><h1 style="padding-left: 50px; display: inline; font-size: 5em"><b>Menu</b></h1><a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a></div>
@@ -32,15 +32,6 @@
 
 </div>
 <div style="margin-left: 20px;font-size: 2em; float: left; height: 100%; width: 80%; border: 0px solid black">
-
-<div style="float: left; padding-top: 30px; height: 15%; width: 100%; text-align: center;">
-    <div style="float:left; width:33%"><i id="fire" style="padding-right: 30px; font-size: 7em; color: #42b4e6" class="fa fa-user-o"></i></div>
-	<div style="float:left; width:33%; padding-top: 30px;"><label class="switch">
-	<input id="vacation" onchange="changeH()" type="checkbox">
-	<div class="slider round"></div>
-	</label></div>
-	<div style="float:left; width:33%"><i id="fire" style="padding-left: 35px; font-size: 7em; color: #42b4e6" class="fa fa-calendar-o"></i></div>
-</div>
 
 <!-- maandag -->
 <div id="1" style="display: block">
@@ -93,8 +84,8 @@
 
 <!-- title --> 
 <div style="float: left; width: 100%;" >
-<div style="width:45%;float:left;padding-left: 30px;"><h1>Day to night</h1></div>
 <div style="width:45%;float:left;padding-left: 30px;"><h1>Night to day</h1></div>
+<div style="width:45%;float:left;padding-left: 30px;"><h1>Day to night</h1></div>
 </div>
 
 <!--bottom-->
@@ -151,6 +142,7 @@
 </div>
 
 <script>
+var huidigeDag = "Monday";
 function openNav() {
     document.getElementById("mySidenav").style.left = "0px";
 }
@@ -170,33 +162,115 @@ function changeDay(day, klik) {
         elements[i].style.backgroundColor = "#42b4e6";
     }
 	document.getElementById(klik.id).style.backgroundColor = "transparent";
-	ophalen(klik.id);
+	storeLocal(huidigeDag);
+	huidigeDag = klik.id;
+	getLocal(klik.id);
 }
+
 function ophalen(dag){
-	var weekprogram = getWeekProgram();
-	var dagprogram = weekprogram[dag];
+	var program = getWeekProgram();
+	var programLocal = localStorage.program;
+	programLocal = JSON.parse(programLocal);
 	for (i = 0; i < 5; i++) {
-		if (dagprogram[i] == null){
-			document.getElementById('input'+(i+1)+'_start').value = "";
-			document.getElementById('input'+(i+1)+'_eind').value = "";
+		if (program[dag][i] != null) {
+			if (program[dag][i][0] != null) {
+				programLocal[dag][i][0] = program[dag][i][0];
+			} else {
+				programLocal[dag][i][0] = "";
+			}
+			if (program[dag][i][1] != null) {
+				programLocal[dag][i][1] = program[dag][i][1];
+			} else {
+				programLocal[dag][i][1] = "";
+			}
 		} else {
-			document.getElementById('input'+(i+1)+'_start').value = dagprogram[i][0];
-			document.getElementById('input'+(i+1)+'_eind').value = dagprogram[i][1];
+			programLocal[dag][i] = ["", ""];
 		}
 	}
+	programLocal = JSON.stringify(programLocal);
+	localStorage.program = programLocal;
+	getLocal(dag);
 }
+
 function opslaan(dag){
+	program = getProgram(dag);
+
+	for (i = 0; i < 5; i++) {
+		if (program[i] != null) {
+			removePeriod(dag, '0');
+		}
+	}		
+	var status = get('weekProgramState','week_program_state');
 	for (i = 0; i < 5; i++) {
 		var start = document.getElementById('input'+(i+1)+'_start');
 		var eind = document.getElementById('input'+(i+1)+'_eind');
-		if ((start != null) && (eind != null)){
+		if ((start.value != "") && (eind.value != "")){
 			addPeriod(dag, start.value, eind.value);
+		}
+		start.value = "";
+		eind.value = "";
+	}
+	put('weekProgramState','week_program_state', status);
+	
+	ophalen(dag);
+	
+}
+
+function storeLocal(dag){
+	var program = localStorage.program;
+	program = JSON.parse(program);
+
+	for (i = 0; i < 5; i++) {
+		var start = document.getElementById('input'+(i+1)+'_start');
+		var eind = document.getElementById('input'+(i+1)+'_eind');
+		if ((start.value != "") && (eind.value != "")){
+			program[dag][i] = [start.value, eind.value];
+		} else if (start.value != "") {
+			program[dag][i] = [start.value, ""];
+		} else if (eind.value != "") {
+			program[dag][i] = ["", eind.value];
+		}
+	}
+	program = JSON.stringify(program);
+	localStorage.program = program;
+}
+function getLocal(dag){
+	var program = localStorage.program;
+	program = JSON.parse(program);
+	for (i = 0; i < 5; i++) {
+		var start = document.getElementById('input'+(i+1)+'_start');
+		var eind = document.getElementById('input'+(i+1)+'_eind');
+		if (program[dag][i][0] != "") {
+			start.value = program[dag][i][0];
+		} else {
+			start.value = "";
+		}
+		if (program[dag][i][1] != "") {
+			eind.value = program[dag][i][1];
+		} else {
+			eind.value = "";
 		}
 	}
 }
+function saveOnExit() {
+	storeLocal(huidigeDag);
+}
+
 $( document ).ready(function() {
-	ophalen('Monday');
-	setDefault();
+	var program = {
+			"Monday":[["",""], ["",""], ["",""], ["",""], ["",""]]
+			,"Tuesday":[["",""], ["",""], ["",""], ["",""], ["",""]]
+			,"Wednesday":[["",""], ["",""], ["",""], ["",""], ["",""]]
+			,"Thursday":[["",""], ["",""], ["",""], ["",""], ["",""]]
+			,"Friday":[["",""], ["",""], ["",""], ["",""], ["",""]]
+			,"Saturday":[["",""], ["",""], ["",""], ["",""], ["",""]]
+			,"Sunday":[["",""], ["",""], ["",""], ["",""], ["",""]]
+			};
+	program = JSON.stringify(program);
+	if (localStorage.program == null) {
+		localStorage.setItem("program", program);
+	}
+	getLocal("Monday");
 });
 </script>
      

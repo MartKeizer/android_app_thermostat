@@ -32,7 +32,6 @@ var NightTemperature;
 var CurrentTemperature;
 var TargetTemperature;
 var ProgramState;
-var HolidayState;
 
 var Program = {};
 Program[Days.Monday]    = [];

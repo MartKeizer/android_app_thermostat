@@ -25,7 +25,7 @@
 
 
 <div style="padding-top: 30px; float: left; height: 25%; width: 100%; text-align: center;">
-    <i onclick="addTemp()" onmousedown="addTempStart()" onmouseup="addTempStop()" style="color: #e75a5e; font-size: 20em" class="fa fa-arrow-up"></i>
+    <i onclick="addTemp()" ontouchstart="addTempStart()" ontouchend="addTempStop()" style="color: #e75a5e; font-size: 20em" class="fa fa-arrow-up"></i>
 </div>
 <br>
 <div style="float: left; height: 25%; width: 100%; text-align: center;">
@@ -34,15 +34,15 @@
 </div>
 
 <div style="float: left; height: 30%; width: 100%; text-align: center;">
-    <i onclick="minTemp()"  onmousedown="minTempStart()" onmouseup="minTempStop()" style="color: #00addb; font-size: 20em" class="fa fa-arrow-down"></i>
+    <i onclick="minTemp()"  ontouchstart="minTempStart()" ontouchend="minTempStop()" style="color: #00addb; font-size: 20em" class="fa fa-arrow-down"></i>
 </div>
 <div style="float: left; padding-top: 30px; height: 15%; width: 100%; text-align: center;">
-    <div style="float:left; width:33%"><i id="fire" style="padding-right: 30px; font-size: 15em; color: #42b4e6" class="fa fa-unlock-alt"></i></div>
+    <div onclick="off()" style="float:left; width:33%"><i id="unlock" style="padding-right: 30px; font-size: 15em; color: #42b4e6" class="fa fa-unlock-alt"></i></div>
 	<div style="float:left; width:33%; padding-top: 30px;"><label class="switch">
 	<input id="vacation" onchange="changeH()" type="checkbox">
 	<div class="slider round"></div>
 	</label></div>
-	<div style="float:left; width:33%"><i id="fire" style="font-size: 15em; color: red" class="fa fa-lock"></i></div>
+	<div onclick="on()" style="float:left; width:33%"><i id="lock" style="font-size: 15em; color: red" class="fa fa-lock"></i></div>
 </div>
 </div>
 
@@ -92,20 +92,24 @@ function addTemp() {
 
 function changeH() {
 	if (document.getElementById("vacation").checked == false) {
-		document.getElementById("vacation").checked = false;
-		window.localStorage.setItem('Holiday', 'off')
+		put('weekProgramState','week_program_state', 'on');
 	} else {
-		document.getElementById("vacation").checked = true;
-		window.localStorage.setItem('Holiday', 'on')
 		put('weekProgramState','week_program_state', 'off');
 	}
 }
-
+function on() {
+	document.getElementById("vacation").checked = true;
+	put('weekProgramState','week_program_state', 'off');
+}
+function off() {
+	document.getElementById("vacation").checked = false;
+	put('weekProgramState','week_program_state', 'on');	
+}
 $( document ).ready(function() {
   var targetTemp = get('targetTemperature','target_temperature');
   document.getElementById("target_temp").innerHTML = targetTemp;
-  var Holiday = window.localStorage.getItem("Holiday");
-  if (Holiday == 'on') {
+  var weekprogram = get('weekProgramState','week_program_state');
+  if (weekprogram == 'off') {
 	document.getElementById("vacation").checked = true;
   } else {
 	document.getElementById("vacation").checked = false;
