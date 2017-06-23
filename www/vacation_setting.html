@@ -13,10 +13,10 @@
 <div id="mySidenav" class="sidenav" style="border-right: 3px solid black;">
   <div style="border-bottom: 3px solid black; min-width: 700px;"><h1 style="padding-left: 50px; display: inline; font-size: 5em"><b>Menu</b></h1><a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a></div>
   <div></div>
-  <div><a href="index.html" style="border: 1px solid black; min-width: 700px;">Home</a></div>
-  <div><a href="week_planning.html" style="border: 1px solid black; min-width: 700px;">Week Planning</a></div>
-  <div><a href="day_night_temperature.html" style="border: 1px solid black; min-width: 700px;">Day / Night</a></div>
-  <div><a href="vacation_setting.html" style="border: 1px solid black; min-width: 700px;">Vacation</a></div>
+  <div><a onclick="confirm2('index.html')" style="border: 1px solid black; min-width: 700px;">Home</a></div>
+  <div><a onclick="confirm2('week_planning.html')" style="border: 1px solid black; min-width: 700px;">Week Planning</a></div>
+  <div><a onclick="confirm2('day_night_temperature.html')" style="border: 1px solid black; min-width: 700px;">Day / Night</a></div>
+  <div><a onclick="confirm2('vacation_setting.html')" style="border: 1px solid black; min-width: 700px;">Vacation</a></div>
 </div>
 
 <div class="top" style="height: 140px"><span style="padding-left: 20px; padding-right: 20vw;font-size:100px;cursor:pointer" onclick="openNav()">&#9776;</span><h1 style="display: inline; font-size: 100px">Vacation</h1></div>
@@ -47,6 +47,20 @@
 </div>
 
 <script>
+var oldTemp;
+var oldState;
+function confirm2(link) {
+	var temperatuur = get('targetTemperature','target_temperature');
+	var state = get('weekProgramState','week_program_state');
+	if (((temperatuur != oldTemp)&&(state == 'off'))||((oldState != state)&&(state == 'off'))) {
+		if (confirm("The new temperature will be " + temperatuur + " °C until you switch off the vacation setting!") == true) {
+			window.location.replace(link);
+		}
+	} else {
+		window.location.replace(link);
+	}
+}
+
 var up = false;
 var down = false;
 window.setInterval(function(){
@@ -107,8 +121,10 @@ function off() {
 }
 $( document ).ready(function() {
   var targetTemp = get('targetTemperature','target_temperature');
+  oldTemp = targetTemp;
   document.getElementById("target_temp").innerHTML = targetTemp;
   var weekprogram = get('weekProgramState','week_program_state');
+  oldState = weekprogram;
   if (weekprogram == 'off') {
 	document.getElementById("vacation").checked = true;
   } else {

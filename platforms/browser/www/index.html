@@ -23,11 +23,28 @@
 
 <div style="height: calc(100vh - 140px);">
 <div style="height: 5%">
-	<div style="float:left"><h1 id="day" style="padding-left: 30px; font-size: 4em; display: inline">Monday</h1></div>
-	<div style="float:right"><h1 id="time" style="padding-right: 30px; font-size: 4em; display: inline;">12:45</h1></div>
+	<div style="float:left;width: 300px"><h1 id="day" style="padding-left: 30px; font-size: 3em; display: inline">Monday</h1></div>
+	
+	<div style="float: left;padding-left:30px;padding-top: 10px;">
+		<i id="cal" style="color: rgba(33, 44, 49, 0.36); font-size: 3em" class="fa fa-calendar"></i>
+	</div>
+	<div style="float: left;padding-left:30px;padding-top: 10px;">
+		<i id="sun" style="color: rgba(33, 44, 49, 0.36); font-size: 3em" class="fa fa-sun-o"></i>
+	</div>
+	<div style="float: left;padding-left:30px;padding-top: 10px;">
+		<i id="moon" style="color: rgba(33, 44, 49, 0.36); font-size: 3em" class="fa fa-moon-o"></i>
+	</div>
+	<div style="float: left;padding-left:30px;padding-top: 10px;">
+		<i id="user" style="color: rgba(33, 44, 49, 0.36); font-size: 3em" class="fa fa-user"></i>
+	</div>
+	<div style="float: left;padding-left:30px;padding-top: 10px;">
+		<i id="lock" style="color: rgba(33, 44, 49, 0.36); font-size: 3em" class="fa fa-lock"></i>
+	</div>
+	
+	<div style="float:right;"><h1 id="time" style="padding-right: 30px; font-size: 3em; display: inline;">12:45</h1></div>
 </div>
 <div style="float: left; height: 25%; width: 100%; text-align: center;">
-    <i onclick="addTemp()" ontouchstart="addTempStart()" ontouchend="addTempStop()" style="color: #e75a5e; font-size: 20em" class="fa fa-arrow-up"></i>
+    <i id="up" onclick="addTemp()" ontouchstart="addTempStart()" ontouchend="addTempStop()" style="visibility: hidden; color: #e75a5e; font-size: 20em" class="fa fa-arrow-up"></i>
 </div>
 <br>
 <div style="float: left; height: 25%; width: 100%; text-align: center;">
@@ -35,7 +52,7 @@
     <h1 style="padding-right: 30px; font-size: 15em; display: inline;"> &#x2103;</h1>
 </div>
 <div style="float: left; height: 12.5%; width: 100%; text-align: center;">
-    <i id="fire" style="font-size: 10em; color: red" class="fa fa-fire"></i>
+    <i id="fire" style="font-size: 10em; color: color: rgba(33, 44, 49, 0.36)" class="fa fa-fire"></i>
 </div>
 <div style="float: left; height: 12.5%; width: 100%; text-align: center;">
     <h1 id="target_temp" style="padding-left: 30px; font-size: 5em; display: inline"></h1>
@@ -43,7 +60,7 @@
 </div>
 
 <div style="float: left; height: 20%; width: 100%; text-align: center;">
-    <i onclick="minTemp()"  ontouchstart="minTempStart()" ontouchend="minTempStop()" style="color: #00addb; font-size: 20em" class="fa fa-arrow-down"></i>
+    <i id="down" onclick="minTemp()"  ontouchstart="minTempStart()" ontouchend="minTempStop()" style="visibility: hidden; color: #00addb; font-size: 20em" class="fa fa-arrow-down"></i>
 </div>
 </div>
 
@@ -93,7 +110,10 @@ function addTemp() {
 
 window.setInterval(function(){
   changeCurrents();
-}, 200);
+}, 100);
+window.setInterval(function(){
+  systemStatus();
+}, 1000);
 
 function changeCurrents(){
 	var targetTemp = get('targetTemperature','target_temperature');
@@ -111,6 +131,57 @@ function changeCurrents(){
 	}
 }
 
+function systemStatus(){
+	var downKnop = document.getElementById("down");
+	var upKnop = document.getElementById("up");
+  
+	var sun = document.getElementById("sun");
+	var moon = document.getElementById("moon");
+	var user = document.getElementById("user");
+	var lock = document.getElementById("lock");
+	var cal = document.getElementById("cal");
+	
+	var targetTemp = get('targetTemperature','target_temperature');
+	var currentTemp = get('currentTemperature','current_temperature');
+	var dayTemp = get('dayTemperature','day_temperature');
+	var nightTemp = get('nightTemperature','night_temperature');
+	var state = get('weekProgramState','week_program_state');
+	
+	if (state == 'on'){
+		downKnop.style.visibility = "visible";
+		upKnop.style.visibility = "visible";
+		downKnop.classList.remove('fa-lock');
+		downKnop.classList.add('fa-arrow-down');
+		downKnop.style.color = "#00addb";
+		cal.style.color = "#00addb";
+		lock.style.color = "rgba(33, 44, 49, 0.36)";		
+		if (targetTemp == dayTemp) {
+			user.style.color = "rgba(33, 44, 49, 0.36)";
+			moon.style.color = "rgba(33, 44, 49, 0.36)";
+			sun.style.color = "yellow";
+		} else if (targetTemp == nightTemp) {
+			sun.style.color = "rgba(33, 44, 49, 0.36)";
+			user.style.color = "rgba(33, 44, 49, 0.36)";
+			moon.style.color = "blue";
+		} else {
+			sun.style.color = "rgba(33, 44, 49, 0.36)";
+			moon.style.color = "rgba(33, 44, 49, 0.36)";
+			user.style.color = "#00addb";
+		}
+	} else {
+		downKnop.style.visibility = "visible";
+		upKnop.style.visibility = "hidden";
+		downKnop.classList.remove('fa-arrow-down');
+		downKnop.classList.add('fa-lock');
+		downKnop.style.color = "#e75a5e";
+		cal.style.color = "rgba(33, 44, 49, 0.36)";
+		sun.style.color = "rgba(33, 44, 49, 0.36)";
+		user.style.color = "rgba(33, 44, 49, 0.36)";
+		moon.style.color = "rgba(33, 44, 49, 0.36)";
+		lock.style.color = "red";
+	}
+}
+
 $( document ).ready(function() {
   var targetTemp = get('targetTemperature','target_temperature');
   document.getElementById("target_temp").innerHTML = targetTemp;
@@ -120,6 +191,7 @@ $( document ).ready(function() {
   document.getElementById("day").innerHTML = day;
   var time = get('time','time');
   document.getElementById("time").innerHTML = time;
+  systemStatus();
 });
 
 </script>
